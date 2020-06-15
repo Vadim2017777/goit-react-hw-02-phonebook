@@ -1,38 +1,77 @@
 import React, { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-import ContactForm from './ContactForm/ContactForm';
-// import { v4 as uuidv4 } from 'uuid';
-// uuidv4();
+import ContactListForm from './ContactForm/ContactForm';
+import Filter from './Filter/Filter';
+import ContactList from './ContactList/ContactList';
 
 class App extends Component {
   state = {
     contacts: [],
-    name: '',
+    filter: '',
   };
 
-  handleNameChange = e => {
-    this.setState({ name: e.target.value });
+  addContacts = ({ name, number }) => {
+    const contacts = {
+      id: uuidv4(),
+      name,
+      number,
+    };
+    const overlap = this.state.contacts.some(
+      contacts => contacts.name === name,
+    );
+
+    if (!overlap) {
+      this.setState(prevState => {
+        return {
+          contacts: [...prevState.contacts, contacts],
+        };
+      });
+    } else alert(`${name} is already in contacts`);
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  removeContacts = id => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(contact => contact.id !== id),
+      };
+    });
+  };
+
+  changeFilter = e => {
+    this.setState({ filter: e.target.value });
+  };
+
+  getVisibleContacts = () => {
+    return this.state.contacts.filter(contact => {
+      return contact.name
+        .toLowerCase()
+        .includes(this.state.filter.toLowerCase());
+    });
   };
 
   render() {
-    const { contacts } = this.state;
-    const { name } = this.state;
-
+    const { filter } = this.state;
+    const VisibleContacts = this.getVisibleContacts();
     return (
       <div>
         <h1>Phonebook</h1>
-        {/* <ContactForm value={name} onIput={this.handleInputContacts} /> */}
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" value={name} onChange={this.handleInputContacts} />
-          <button type="submit">Добавить телефон</button>
-        </form>
+        <ContactListForm onAddContacts={this.addContacts} />
         <h2>Contacts</h2>
-        {/* <Filter ... />
-      <ContactList ... /> */}
+
+        {this.state.contacts.length > 1 && (
+          <>
+            <h3>Find my contacts</h3>
+            <Filter value={filter} onChange={this.changeFilter} />
+          </>
+        )}
+
+        {this.state.contacts.length > 0 && (
+          <ContactList
+            contacts={VisibleContacts}
+            onRemove={this.removeContacts}
+          />
+        )}
       </div>
     );
   }
