@@ -29,8 +29,8 @@ export default class ContactForm extends Component {
   };
 
   render() {
-    const { name } = this.state;
-    const { number } = this.state;
+    const { name, number } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -57,17 +57,6 @@ export default class ContactForm extends Component {
   }
 }
 
-ContactForm.defaultProps = {
-  contacts: [],
-};
-
 ContactForm.propTypes = {
   onRemove: PropTypes.func,
-  contacts: PropTypes.arrayOf(
-    PropTypes.exact({
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-      id: PropTypes.node,
-    }),
-  ).isRequired,
 };
