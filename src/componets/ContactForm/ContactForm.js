@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 
 import './ContactForm.module.css';
 
+const INITIAL_STATE = {
+  name: '',
+  number: '',
+};
+
 export default class ContactForm extends Component {
   state = {
     name: '',
@@ -15,8 +20,12 @@ export default class ContactForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onAddContacts(this.state);
-    this.setState({ name: '', number: '' });
+    this.props.onAddContacts({ ...this.state });
+    this.reset();
+  };
+
+  reset = () => {
+    this.setState({ ...INITIAL_STATE });
   };
 
   render() {
