@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './ContactForm.module.css';
+import { INITIAL_STATE_FORM } from '../helpers/constants';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+import './ContactForm.module.css';
 
 export default class ContactForm extends Component {
   state = {
-    name: '',
-    number: '',
+    ...INITIAL_STATE_FORM,
   };
 
   handleInputChange = e => {
@@ -19,13 +15,14 @@ export default class ContactForm extends Component {
   };
 
   handleSubmit = e => {
+    const { onAddContacts } = this.props;
     e.preventDefault();
-    this.props.onAddContacts({ ...this.state });
+    onAddContacts({ ...this.state });
     this.reset();
   };
 
   reset = () => {
-    this.setState({ ...INITIAL_STATE });
+    this.setState({ ...INITIAL_STATE_FORM });
   };
 
   render() {

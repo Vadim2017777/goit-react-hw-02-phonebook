@@ -5,10 +5,11 @@ import ContactListForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 
+import { INITIAL_STATE_APP } from '../componets/helpers/constants';
+
 class App extends Component {
   state = {
-    contacts: [],
-    filter: '',
+    ...INITIAL_STATE_APP,
   };
 
   addContacts = ({ name, number }) => {
@@ -38,21 +39,21 @@ class App extends Component {
     });
   };
 
-  changeFilter = e => {
-    this.setState({ filter: e.target.value });
+  changeFilter = ({ target }) => {
+    const filter = target.value;
+    this.setState({ filter });
   };
 
   getVisibleContacts = () => {
-    return this.state.contacts.filter(contact => {
-      return contact.name
-        .toLowerCase()
-        .includes(this.state.filter.toLowerCase());
+    const { contacts, filter } = this.state;
+    return contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(filter.toLowerCase());
     });
   };
 
   render() {
     const { filter } = this.state;
-    const VisibleContacts = this.getVisibleContacts();
+    const visibleContacts = this.getVisibleContacts();
     return (
       <div>
         <h1>Phonebook</h1>
@@ -68,7 +69,7 @@ class App extends Component {
 
         {this.state.contacts.length > 0 && (
           <ContactList
-            contacts={VisibleContacts}
+            contacts={visibleContacts}
             onRemove={this.removeContacts}
           />
         )}

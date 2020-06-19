@@ -7,11 +7,7 @@ const Filter = ({ filter, onChange }) => (
 
 export default Filter;
 
-Filter.defaultProps = {
-  filter: '',
-};
-
 Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
+  filter: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
